@@ -127,7 +127,7 @@ var Indent = function (config) {
         }
 
         for (i = 0; i < indexes.length; i++) {
-                rows[indexes[i]].value = columns[i].join('|');
+            rows[indexes[i]].value = this.leftPadAmount(columns[i].join('|'), this.stepIndent);
         }
 
         return rows;
