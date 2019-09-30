@@ -9,20 +9,24 @@ var Indent = function (config) {
     this.languageIndex = '0';
     var words = {
         scenario: ['Scenario'],
+        background: ['Background'],
         given: ['Given'],
         when: ['When'],
         then: ['Then'],
         and: ['And'],
         but: ['But'],
+        examples: ['Examples'],
     };
 
     var activeWords = {
         scenario: words.scenario[this.languageIndex],
+        background: words.background[this.languageIndex],
         given: words.given[this.languageIndex],
         when: words.when[this.languageIndex],
         then: words.then[this.languageIndex],
         and: words.and[this.languageIndex],
         but: words.but[this.languageIndex],
+        examples: words.examples[this.languageIndex],
     }
 
     this.init = function (originalText) {
@@ -78,6 +82,13 @@ var Indent = function (config) {
                 this.lines[index] = this.leftPad(line, activeWords.and);
             } else if (this.isValidStep(line, activeWords.but)) {
                 this.lines[index] = this.leftPad(line, activeWords.but);
+   
+            } else if (this.isValidStep(line, activeWords.scenario)) {
+                this.lines[index] = this.leftPad(line, activeWords.scenario);
+            } else if (this.isValidStep(line, activeWords.background)) {
+                this.lines[index] = this.leftPad(line, activeWords.background);
+            } else if (this.isValidStep(line, activeWords.examples)) {
+                this.lines[index] = this.leftPad(line, activeWords.examples);
             }
         }, this);
     }
@@ -143,8 +154,28 @@ var Indent = function (config) {
         if (this.stepIndent > stepName.length) {
             var from = str.indexOf(stepName);
             var rem = str.substr(from, str.length - from);
-            var step = Array(this.stepIndent - stepName.length + 1).join(" ") + rem;
+            var step;
+
+            if(stepName === activeWords.scenario) {
+                step = Array(this.stepIndent - stepName.length).join(" ") + rem
+                
+            } else if (stepName === activeWords.background) {
+                step = this.leftPadAmount(rem, this.stepIndent - stepName.length + 2);
+                
+            } else if (stepName === activeWords.examples) {
+                step = this.leftPadAmount(rem, this.stepIndent - stepName.length + 4);
+                
+            } else {
+                step = this.leftPadAmount(rem, this.stepIndent - stepName.length + 1);
+            }
             return step;
+        }
+        return str;
+    }
+
+    this.leftPadAmount = function (str, distance) {
+        if(distance > 0) {
+            str = Array(distance).join(" ") + str;
         }
         return str;
     }
