@@ -7,6 +7,7 @@ var Indent = function (config) {
     this.originalText = "";
     this.lines = [];
     this.languageIndex = '0';
+    this.lineEndings = '\r\n';
     var words = {
         scenario: ['Scenario'],
         background: ['Background'],
@@ -32,7 +33,12 @@ var Indent = function (config) {
     this.init = function (originalText) {
         var formatedText = '';
         this.originalText = originalText;
-        this.lines = this.originalText.split('\r\n');
+        // Figure out the line ending type
+        if(this.originalText.match(/\r\n/) === null) {
+            this.lineEndings = '\n';
+        }
+        
+        this.lines = this.originalText.split(this.lineEndings);
         if (this.lines[this.lines.length - 1].indexOf('|') !== -1)
             this.lines.push(" ");
     }
@@ -50,7 +56,7 @@ var Indent = function (config) {
             }, this);
         }, this);
 
-        formatedText = this.lines.join('\r\n');
+        formatedText = this.lines.join(this.lineEndings);
         return formatedText;
     }
 
