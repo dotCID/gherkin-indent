@@ -76,6 +76,11 @@
           "type": "number",
           "default": "7",
           "description": "Default indentation for Given, When, Then, And, But steps"
+        },
+        "gherkin-indent.widerTables": {
+            "type": "boolean",
+            "default": false,
+            "description": "Add some extra space around table contents."
         }
       }
     }

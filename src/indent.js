@@ -1,8 +1,12 @@
 var Indent = function (config) {
     this.stepIndent = 7;
+    this.widerTables = false;
 
     if (config && config.stepIndent)
         this.stepIndent = config.stepIndent;
+
+    if (config && config.widerTables)
+        this.widerTables = config.widerTables;
 
     this.originalText = "";
     this.lines = [];
@@ -126,7 +130,14 @@ var Indent = function (config) {
             max = this.longest(i, columns);
             if (max > 0) {
                 for (j = 0; j < columns.length; j++) {
-                    var newValue = this.centerPad(columns[j][i], max - columns[j][i].length)
+                    var newValue;
+
+                    if (this.widerTables) {
+                        newValue = this.centerPad(columns[j][i], max - columns[j][i].length + 2)
+                    } else {
+                        newValue = this.centerPad(columns[j][i], max - columns[j][i].length)
+                    }
+
                     columns[j][i] = newValue;
                 }
             }
