@@ -65,10 +65,12 @@ var Indent = function (config) {
         var rows = [];
         this.lines.forEach(function (line, index) {
             if (line.indexOf('|') !== -1) {
-                rows.push({ value: line, lineNumber: index });
-                if (index + 1 < this.lines.length && this.lines[index + 1].indexOf('|') === -1) {
-                    tables.push(rows);
-                    rows = [];
+                if (!(line.indexOf('#') !== -1 && line.indexOf('#') < line.indexOf('|'))) { // This line isn't commented out
+                    rows.push({ value: line, lineNumber: index });
+                    if (index + 1 < this.lines.length && this.lines[index + 1].indexOf('|') === -1) {
+                        tables.push(rows);
+                        rows = [];
+                    }
                 }
             }
         }, this);
